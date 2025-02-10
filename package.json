@@ -1,0 +1,24 @@
+{
+  "name": "research-agent",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Chirag",
+  "license": "ISC",
+  "type": "module",
+  "description": "",
+  "dependencies": {
+    "@agentic/predict-leads": "^7.2.0",
+    "@ai-sdk/anthropic": "^1.1.5",
+    "@ai-sdk/google": "^1.1.10",
+    "@ai-sdk/groq": "^1.1.6",
+    "@ai-sdk/openai": "^1.1.4",
+    "ai": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "lodash": "^4.17.21",
+    "scrapegraph-js": "^0.0.2"
+  }
+}
