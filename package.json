@@ -16,9 +16,15 @@
     "@ai-sdk/google": "^1.1.10",
     "@ai-sdk/groq": "^1.1.6",
     "@ai-sdk/openai": "^1.1.4",
+    "@ai-sdk/perplexity": "^0.0.8",
     "ai": "^4.1.0",
     "dotenv": "^16.4.7",
     "lodash": "^4.17.21",
     "scrapegraph-js": "^0.0.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.20.0",
+    "eslint": "^9.20.1",
+    "globals": "^15.15.0"
   }
 }
