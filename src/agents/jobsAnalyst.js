@@ -1,78 +1,56 @@
 import { generateText } from 'ai'; 
 import { google } from '@ai-sdk/google';
 import fs from 'fs'
+import { openai } from '@ai-sdk/openai';
 
 
 
-async function jobsAnalyst(account, accountPath) {
+async function jobsAnalyst(account, accountPath, client) {
  // Get jobs data
  console.log('🚀 Running Job Analyst Agent')
  console.log(`-- 🛠 Fetching jobs for ${account} \n`)
- const jobs = fs.readFileSync(`${accountPath}/jobs_data.json`, 'utf8');
+ const jobs = fs.readFileSync(`${accountPath}/jobs/jobs_data.json`, 'utf8');
+ const jobsStats = fs.readFileSync(`${accountPath}/jobs/jobs_stats.json`, 'utf8');
 
  const { text: analysis, usage } = await generateText({
- model: google('gemini-2.0-flash-001'),
-//  system: `You are a word class data analyst. You will be provided job posts of a company in json format. 
- 
+ model: google('gemini-1.5-flash'),
+	temperature: 0.4,
 
-//  # Instructions
-//  - Your task is to make a report that includes the following: 
-//   * Areas in which the company is hiring.
-//   * Analysis of what it might mean.
-//   * Try to infer priorities and focus areas of the company.
-// - Do not hallucinate.
-// - Return the results in Markdown format.
-
-// `,
-//  prompt: `Here are the job posts of ${account}:
-
-// ${jobs}
-// `
 system: `
 
-You're an experienced Sales Analyst with decades of experience. 
-You have just joined ${account} to help them with analysis of their target customers.
+# Role & Context
+- You are a highly experienced Sales Analyst.
+-----------------------------------------------------
 
-You will be given a JSON file with all the job postings at ${account}.
 
-Perform a thorough and in-depth analysis of these job postings to come up with
-sales insights for your team.
+# Instructions
+- Your goal is to produce a **comprehensive, data-driven report that will help understanding in what areas the company might be needing workforce.
+- Make sure to include the below sections in your report:
+	* 1. Experience Levels (High Priority) - Tabular format
+	* 2. Tech Stack / Platforms (High Priority)
+	* 3. Estimate(range) of Open Positions along with the roles (High Priority)
+	* 4. Job Roles & Departments
+		a. Summary of all the job roles and departments with a range of open positions (tabular).
+		b. Elaborate on hiring for the executive, directors, vp, etc. roles. Highlight their tech stack, industry, job function, etc. and try to infer what does it mean from your perspective.(Tabular)
+		E.g. Role | Function | Tech Stack | Industry | Insight 
+	* 5. Locations / Geographies
+	* 6. Hiring Trends
+	* 7. Predictions & Insights (Based on tech stack and opened roles)
+-----------------------------------------------------
 
-Your analysis will be very important because it will help your team understand
-areas of weakness and areas of future priorities for a client.
- 
-
-Detailed instructions for you are mentioned below  
- - Your task is to conduct deep research and create a report on the following 
-  * The job roles for which a company is hiring
-  * The departments in which this company is hiring 
-  * The locations or geographies in which the company is hiring
-  * The level of experience required in the different job roles.
-		Openings for senior roles can indicate upcoming strategic moves.
-	  Openings for junior roles can indicate current operational challenges.
-
-  * The number of open positions in the job roles, department or location. 
-	  Higher number of open positions indicates strong need or a major future
-	  initiative
-	
-	* The exact platform or product with which comfort or experience is required.
-		This indicates the existing tech stack of the company
-		
-	* Trends in the overall hiring listings of this company
-	
-	* Your predictions on current pain areas and future focus areas based on 
-		openings at this company. 
-	
-- Make sure to double check every detail and make heavily number and fact backed claims.
-
-- Your report will be used by senior sales leaders to create in depth sales strategies,
-	so make sure everything is in-depth, number backed, and accurate
-	
-- Return the results in Markdown format.
-
+# Rules
+1. You will be given jobs stats. Use that to understand numbers.
+2. YOu will be given full job details. Use that to understand the type of jobs in detail.
+3. Do not make up information, only use whatever is provided.
 
 `,
- prompt: `Here are the job posts of ${account}:
+
+
+ prompt: ` Here is the jobs stats of ${account}:
+	
+	${jobsStats}
+	
+	Here are the job posts of ${account}:
 
 ${jobs}
 `
